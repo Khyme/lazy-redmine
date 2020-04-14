@@ -24,7 +24,7 @@
 		is-inline
 		:max-date="new Date()"
 	/>
-	{{days}}
+
     <button :disabled="!project || !key || !activity" v-on:click="submit">PLZ HELP ME</button>
 
   </div>
