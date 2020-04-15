@@ -2,7 +2,8 @@
   <div class="lr">
     <h1>Lazy Redmine</h1>
     <p>
-        En retard pour remplir les temps du trimestre ? Y'a qu'à cliquer ! Retire les jours fériés et les week ends comme un grand
+        En retard pour remplir les temps du trimestre ? Y'a qu'à cliquer !
+		<span class="small">Retire les jours fériés et les week ends comme un grand</span>
     </p>
 	<div>
 		<input v-model="key" placeholder="Ma clé redmine">
