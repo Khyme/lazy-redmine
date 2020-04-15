@@ -1,32 +1,35 @@
 <template>
-  <div class="hello">
+  <div class="lr">
     <h1>Lazy Redmine</h1>
     <p>
         En retard pour remplir les temps du trimestre ? Y'a qu'à cliquer ! Retire les jours fériés et les week ends comme un grand
     </p>
-	<select v-model="project">
-        <option v-for="p in projects" v-bind:value="p.id" v-bind:key="p.id">
-            {{ p.name }}
-        </option>
-	</select>
-    <select v-model="activity">
-        <option v-for="a in activities" v-bind:value="a.id" v-bind:key="a.id">
-            {{ a.name }}
-        </option>
-	</select>
-    <input v-model="key" placeholder="Ma clé redmine">
+	<div>
+		<input v-model="key" placeholder="Ma clé redmine">
+	</div>
+	<div>
+		<select v-model="project">
+			<option v-for="p in projects" v-bind:value="p.id" v-bind:key="p.id">
+				{{ p.name }}
+			</option>
+		</select>
 
-	<v-date-picker
-		mode="range"
-		v-model='days'
-		color="red"
-		is-dark
-		is-inline
-		:max-date="new Date()"
-	/>
-
-    <button :disabled="!project || !key || !activity" v-on:click="submit">PLZ HELP ME</button>
-
+		<select v-model="activity">
+			<option v-for="a in activities" v-bind:value="a.id" v-bind:key="a.id">
+				{{ a.name }}
+			</option>
+		</select>
+	</div>
+	<div class="calendar">
+		<v-date-picker
+			mode="range"
+			v-model='days'
+			color="red"
+			is-dark
+			is-inline
+		/>
+	</div>
+	<button class="button primary submit" :disabled="!project || !key || !activity" v-on:click="submit">PLZ HELP ME</button>
   </div>
 </template>
 
@@ -89,21 +92,3 @@ export default {
 
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>

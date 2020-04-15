@@ -1,0 +1,107 @@
+// -- MIXIN TRANSITION
+@mixin transition($transition) {
+    -ms-transition:     $transition;
+    -moz-transition:    $transition;
+    -o-transition:      $transition;
+    -webkit-transition: $transition;
+    transition:         $transition;
+}
+
+@mixin transition($transition) {
+    -ms-transition:     $transition;
+    -moz-transition:    $transition;
+    -o-transition:      $transition;
+    -webkit-transition: $transition;
+    transition:         $transition;
+}
+
+// ** END VARIABLES SCSS ** //
+
+html, body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0px;
+    height: 100%;
+	background: #fffbd5;
+	overflow: hidden;
+}
+
+#app {
+	background: #fffbd5;  /* fallback for old browsers */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    height: 100%;
+	margin-top: 60px;
+	.footer {
+		height: 50%;
+		position: relative;
+		background: -webkit-linear-gradient(to top, #b20a2c, #fffbd5);  /* Chrome 10-25, Safari 5.1-6 */
+		background: linear-gradient(to top, #b20a2c, #fffbd5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	}
+}
+
+.button {
+    font-size: 14px;
+    color: $color-neutral;
+    border: none;
+    border-radius: 5px;
+    padding: 7px 10px;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    outline: none;
+    &.primary {
+        @include transition(200ms);
+        background-color: $color-primary;
+        &:hover {
+            @include transition(200ms);
+            background-color: $color-primary-hover;
+        }
+        &:disabled {
+          background-color: $color-light-gray;
+          cursor: default;
+        }
+    }
+    &.submit {
+        margin: 15px;
+    }
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.reverted {
+  transform: scaleX(-1);
+}
+.lr{
+	input {
+		background-color: $color-neutral !important;
+		color: $color-primary;
+		border: 1px solid $color-light-gray !important;
+		border-radius: 5px !important;
+		font-size: $baseFontSize;
+		padding: 5px 5px 5px 8px !important;
+		height: $input-height;
+		line-height: $input-height;
+		box-sizing: border-box;
+
+		::placeholder {
+			color: $color-light-gray;
+		}
+	}
+
+	select {
+		border: 1px solid $color-light-gray;
+		border-radius: 5px !important;
+		background-color: $color-neutral;
+		margin: 15px;
+		height: 30px;
+		line-height: 30px;
+	}
+	.calendar {
+		display: flex;
+    	justify-content: center;
+	}
+}
