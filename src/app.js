@@ -6,7 +6,7 @@ var bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
 
-app.post('/api', (req, res) =>
+app.post('/api/time_entries', (req, res) =>
     axios({
 		method: 'post',
 		baseURL: 'https://redmine.adtag.fr/time_entries.json',
@@ -20,14 +20,14 @@ app.post('/api', (req, res) =>
 				"project_id":req.body.project,
 				"hours":req.body.hours,
 				"activity_id":req.body.activity,
-				"comments":"added via Lazy Redmine",
+				"comments":req.body.comments,
 				"spent_on":req.body.date
 			}
 		}
-    }).then(response => {
-          res.send(response.data)
+	}).then(response => {
+    	res.send(response.data)
 	}).catch(e => {
-		console.log(e)
+		console.error(e)
 	})
 )
 
