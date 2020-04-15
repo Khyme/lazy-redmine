@@ -32,7 +32,8 @@
 			is-inline
 		/>
 	</div>
-	<button class="button primary submit" :disabled="!project || !key || !activity" v-on:click="submit">PLZ HELP ME</button>
+	<button class="button primary submit" :disabled="!project || !key || !activity || loading" v-on:click="submit">PLZ HELP ME</button>
+    <notifications group="notif" />
   </div>
 </template>
 
@@ -44,6 +45,7 @@ export default {
   name: 'Form',
   data () {
     return {
+      loading: false,
       feries: null,
       key: '',
       comments: 'added via Lazy Redmine',
@@ -98,8 +100,10 @@ export default {
       this.saveStorage(storedForm) // save changes into localStorage
     },
     submit: function () {
+      var self = this
+      this.loading = true
       for (var m = moment(this.days.start); m.isBefore(moment(this.days.end).add(1, 'days')); m.add(1, 'days')) {
-        var dateFormatted = m.format('YYYY-MM-DD')
+        let dateFormatted = m.format('YYYY-MM-DD')
         if(m.isoWeekday() < 6 && !(this.feries.includes(dateFormatted))) {
           axios({
             method: 'post',
@@ -115,9 +119,32 @@ export default {
               activity: this.activity,
               date: dateFormatted
             }
-          });
+          }).then(response => {
+                if(response.status === 200) {
+                    self.$notify({
+                        group: 'notif',
+                        type: 'success',
+                        title: 'Success on ' + dateFormatted
+                    })
+                } else {
+                    self.$notify({
+                        group: 'notif',
+                        type: 'error',
+                        title: 'Error ' + response.status + ' on ' + dateFormatted
+                    })
+                }
+              }
+          ).catch(e => {
+            self.$notify({
+                group: 'notif',
+                type: 'error',
+                title: 'Error ' + e.response.status + ' on ' + dateFormatted,
+                text: e.response.statusText
+            })
+          })
         }
       }
+      setTimeout(() => {  self.loading = false; }, 2000)
     }
   }
 
