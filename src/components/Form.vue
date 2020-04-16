@@ -5,6 +5,9 @@
         En retard pour remplir les temps du trimestre ? Y'a qu'à cliquer !
 		<span class="small">Retire les jours fériés et les week ends comme un grand</span>
     </p>
+    <a :href="timesheetUrl"  target="_blank">
+        <button class="button secondary">Ma page de temps Redmine</button>
+    </a>
 	<div>
 		<input v-model="key" placeholder="Ma clé redmine" @change="updateForm('key', $event.target.value)">
     <input v-model="comments" placeholder="Comment" @change="updateForm('comments', $event.target.value)">
@@ -34,6 +37,7 @@
 	</div>
 	<button class="button primary submit" :disabled="!project || !key || !activity || loading" v-on:click="submit">PLZ HELP ME</button>
     <notifications group="notif" />
+  {{timesheetUrl}}
   </div>
 </template>
 
@@ -45,6 +49,7 @@ export default {
   name: 'Form',
   data () {
     return {
+      timesheetUrl: '',
       loading: false,
       feries: null,
       key: '',
@@ -72,6 +77,14 @@ export default {
         this.comments = storedForm.comments
       }
     }
+    axios({
+            method: 'get',
+            baseURL: '/api/baseurl',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+    }).then(response => { this.timesheetUrl = response.data})
+
   },
   mounted () {
     fetch('https://jours-feries-france.antoine-augusti.fr/api/' + moment().year())

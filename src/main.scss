@@ -66,6 +66,19 @@ html, body {
           cursor: default;
         }
     }
+	&.secondary {
+        @include transition(200ms);
+        background-color: $color-secondary;
+        &:hover {
+            @include transition(200ms);
+            background-color: $color-secondary-hover;
+        }
+        &:disabled {
+          background-color: $color-light-gray;
+          cursor: default;
+        }
+		margin-bottom: 15px;
+    }
     &.submit {
         margin: 15px;
     }

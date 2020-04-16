@@ -36,4 +36,8 @@ app.post('/api/time_entries', (req, res) =>
 	})
 )
 
+app.get('/api/baseurl', (req, res) =>
+	res.send(config.get('redmineBaseUrl') + '/time_entries?user_id=me')
+)
+
 app.listen(port)
