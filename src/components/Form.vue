@@ -10,7 +10,8 @@
     </a>
 	<div>
 		<input v-model="key" placeholder="Ma clé redmine" @change="updateForm('key', $event.target.value)">
-    <input v-model="comments" placeholder="Comment" @change="updateForm('comments', $event.target.value)">
+        <input v-model="comments" placeholder="Comment" @change="updateForm('comments', $event.target.value)">
+        <input v-model="hours" type="number" step="0.10" min="0.1" max="8" placeholder="Hours" @change="updateForm('hours', $event.target.value)">
 	</div>
 	<div>
 		<select v-model="project">
@@ -18,7 +19,6 @@
 				{{ p.name }}
 			</option>
 		</select>
-
 
 		<select v-model="activity">
 			<option v-for="a in activities" v-bind:value="a.id" v-bind:key="a.id">
@@ -37,7 +37,6 @@
 	</div>
 	<button class="button primary submit" :disabled="!project || !key || !activity || loading" v-on:click="submit">PLZ HELP ME</button>
     <notifications group="notif" />
-  {{timesheetUrl}}
   </div>
 </template>
 
@@ -55,6 +54,7 @@ export default {
       key: '',
       comments: 'added via Lazy Redmine',
       days: {},
+      hours: 8,
       project: 218,
       projects: [
         { name: 'R&D - Herow', id: 218},
@@ -75,6 +75,9 @@ export default {
       }
       if (storedForm.comments) {
         this.comments = storedForm.comments
+      }
+      if (storedForm.hours) {
+        this.hours = storedForm.hours
       }
     }
     axios({
@@ -128,7 +131,7 @@ export default {
               key: this.key,
               project: this.project,
               comments: this.comments,
-              hours: 8,
+              hours: this.hours,
               activity: this.activity,
               date: dateFormatted
             }
