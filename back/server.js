@@ -7,6 +7,7 @@ const port = 3000
 var bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
+app.use(express.static('dist'))
 
 const httpClient = axios.create({
 		method: 'post',
@@ -50,5 +51,7 @@ app.post('/api/time_entries/check', (req, res) =>
 app.get('/api/baseurl', (req, res) =>
 	res.send(config.get('redmineBaseUrl') + '/time_entries?user_id=me')
 )
+
+app.get('/', (req, res) => res.send('Hello'))
 
 app.listen(port)

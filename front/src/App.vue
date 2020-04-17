@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <Form/>
-	<div class="footer"></div>
+    <Form />
+    <div class="footer" />
   </div>
 </template>
 
@@ -18,5 +18,4 @@ export default {
 
 <style lang="scss">
 @import "./main.scss";
-
 </style>
