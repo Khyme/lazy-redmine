@@ -36,6 +36,17 @@ app.post('/api/time_entries', (req, res) =>
 	})
 )
 
+app.post('/api/time_entries/check', (req, res) =>
+    httpClient.get('/time_entries.json?user_id=me&spent_on='+req.body.date,{
+		headers: {'X-Redmine-API-Key': req.body.key}
+	}).then(response => {
+		res.send(response.data)
+	}).catch(e => {
+		res.sendStatus(e.response.status)
+		console.error(e)
+	})
+)
+
 app.get('/api/baseurl', (req, res) =>
 	res.send(config.get('redmineBaseUrl') + '/time_entries?user_id=me')
 )

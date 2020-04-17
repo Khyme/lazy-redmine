@@ -4,14 +4,26 @@
     <p>
         En retard pour remplir les temps du trimestre ? Y'a qu'à cliquer !
 		<span class="small">Retire les jours fériés et les week ends comme un grand</span>
+		<span class="small">Ne dépasse jamais 8h par jour</span>
     </p>
     <a :href="timesheetUrl"  target="_blank">
         <button class="button secondary">Ma page de temps Redmine</button>
     </a>
 	<div>
+		<div>
+		<label for="checkbox">Ma clé redmine</label>
 		<input v-model="key" placeholder="Ma clé redmine" @change="updateForm('key', $event.target.value)">
+		</div>
+		<div>
+		<label for="checkbox">Commentaire</label>
         <input v-model="comments" placeholder="Comment" @change="updateForm('comments', $event.target.value)">
-        <input v-model="hours" type="number" step="0.10" min="0.1" max="8" placeholder="Hours" @change="updateForm('hours', $event.target.value)">
+		</div>
+		<div>
+		<label for="checkbox">Nombre d'heure</label>
+        <input v-model="hours" type="number" step="0.10" min="0.1" max="8" placeholder="Hours" @change="updateForm('hours', $event.target.value)" :disabled="fillhours">
+		<input type="checkbox" id="checkbox" v-model="fillhours">
+		<label for="checkbox">Compléter les journées</label>
+		</div>
 	</div>
 	<div>
 		<select v-model="project">
@@ -48,6 +60,7 @@ export default {
   name: 'Form',
   data () {
     return {
+      fillhours: false,
       timesheetUrl: '',
       loading: false,
       feries: null,
@@ -121,7 +134,32 @@ export default {
       for (var m = moment(this.days.start); m.isBefore(moment(this.days.end).add(1, 'days')); m.add(1, 'days')) {
         let dateFormatted = m.format('YYYY-MM-DD')
         if(m.isoWeekday() < 6 && !(this.feries.includes(dateFormatted))) {
-          axios({
+			axios({
+            method: 'post',
+            baseURL: '/api/time_entries/check',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            data: {
+              key: this.key,
+              date: dateFormatted
+            }
+          }).then(response => {
+				let timespent = 0
+               response.data.time_entries.forEach(x => {timespent+= x.hours})
+				if(timespent < 8) {
+				this.putTimeEntry(dateFormatted, timespent)
+				}
+              }).catch(e => {
+				console.error(e)
+          })
+        }
+      }
+      setTimeout(() => {  self.loading = false; }, 2000)
+    },
+	putTimeEntry: function (date, timespent) {
+		let h = this.fillhours ? 8-timespent : Math.min(this.hours, 8-timespent)
+		axios({
             method: 'post',
             baseURL: '/api/time_entries',
             headers: {
@@ -131,37 +169,34 @@ export default {
               key: this.key,
               project: this.project,
               comments: this.comments,
-              hours: this.hours,
+              hours: h,
               activity: this.activity,
-              date: dateFormatted
+              date: date
             }
           }).then(response => {
                 if(response.status === 200) {
-                    self.$notify({
+                    this.$notify({
                         group: 'notif',
                         type: 'success',
-                        title: 'Success on ' + dateFormatted
+                        title: 'Success on ' + date + ' added ' + h + ' hours'
                     })
                 } else {
-                    self.$notify({
+                    this.$notify({
                         group: 'notif',
                         type: 'error',
-                        title: 'Error ' + response.status + ' on ' + dateFormatted
+                        title: 'Error ' + response.status + ' on ' + date
                     })
                 }
               }
           ).catch(e => {
-            self.$notify({
+            this.$notify({
                 group: 'notif',
                 type: 'error',
-                title: 'Error ' + e.response.status + ' on ' + dateFormatted,
+                title: 'Error ' + e.response.status + ' on ' + date,
                 text: e.response.statusText
             })
           })
-        }
-      }
-      setTimeout(() => {  self.loading = false; }, 2000)
-    }
+	}
   }
 
 }

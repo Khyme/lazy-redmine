@@ -102,7 +102,10 @@ html, body {
 		height: $input-height;
 		line-height: $input-height;
 		box-sizing: border-box;
-
+		&:disabled {
+          color: $color-light-gray;
+          cursor: default;
+        }
 		::placeholder {
 			color: $color-light-gray;
 		}
