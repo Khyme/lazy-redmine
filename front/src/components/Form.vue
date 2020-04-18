@@ -14,27 +14,36 @@
     >
       <button class="button secondary">Ma page de temps Redmine</button>
     </a>
-    <div>
-      <div>
-        <label for="checkbox">Ma clé redmine</label>
+    <div class="container">
+      <div class="label-input">
+        <label
+          class="flex50"
+          for="checkbox"
+        >Clé redmine</label>
         <input
           v-model="key"
+          class="input flex50"
           placeholder="Ma clé redmine"
           @change="updateForm('key', $event.target.value)"
         >
       </div>
-      <div>
-        <label for="checkbox">Commentaire</label>
+      <div class="label-input">
+        <label
+          class="flex50"
+          for="checkbox"
+        >Commentaire</label>
         <input
           v-model="comments"
+          class="input flex50"
           placeholder="Comment"
           @change="updateForm('comments', $event.target.value)"
         >
       </div>
-      <div>
+      <div class="label-input">
         <label for="checkbox">Nombre d'heure</label>
         <input
           v-model="hours"
+          class="input flex50"
           type="number"
           step="0.10"
           min="0.1"
@@ -51,28 +60,23 @@
         <label for="checkbox">Compléter les journées</label>
       </div>
     </div>
-    <div>
-      <select v-model="project">
-        <option
-          v-for="p in projects"
-          :key="p.id"
-          :value="p.id"
-        >
-          {{ p.name }}
-        </option>
-      </select>
-
-      <select v-model="activity">
-        <option
-          v-for="a in activities"
-          :key="a.id"
-          :value="a.id"
-        >
-          {{ a.name }}
-        </option>
-      </select>
+    <div class="container flex">
+      <div class="selector">
+        <vselect
+          v-model="project"
+          label="name"
+          :options="projects"
+        />
+      </div>
+      <div class="selector">
+        <vselect
+          v-model="activity"
+          label="name"
+          :options="activities"
+        />
+      </div>
     </div>
-    <div class="calendar">
+    <div class="container flex">
       <v-date-picker
         v-model="days"
         mode="range"
@@ -108,16 +112,25 @@ export default {
       comments: 'added via Lazy Redmine',
       days: {},
       hours: 8,
-      project: 218,
+      project: { name: 'R&D - Herow', id: 218 },
       projects: [
         { name: 'R&D - Herow', id: 218 },
         { name: '*Connecthings', id: 92 }
       ],
-      activity: 376,
+      activity: { name: 'Développement', id: 376 },
       activities: [
         { name: 'Développement', id: 376 },
         { name: 'Congé payés / RTT', id: 375 }
       ]
+    }
+  },
+  watch: {
+    // putting watchers since vselect @change is broken https://github.com/sagalbot/vue-select/issues/545
+    activity: function (newEnv, oldEnv) {
+      this.updateForm('activity', newEnv)
+    },
+    project: function (newEnv, oldEnv) {
+      this.updateForm('project', newEnv)
     }
   },
   created () {
@@ -131,6 +144,12 @@ export default {
       }
       if (storedForm.hours) {
         this.hours = storedForm.hours
+      }
+      if (storedForm.activity) {
+        this.activity = storedForm.activity
+      }
+      if (storedForm.project) {
+        this.project = storedForm.project
       }
     }
     axios({

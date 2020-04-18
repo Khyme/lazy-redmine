@@ -1,4 +1,6 @@
-// -- MIXIN TRANSITION
+@import "vue-select/src/scss/vue-select.scss";
+
+// // -- MIXIN TRANSITION
 @mixin transition($transition) {
     -ms-transition:     $transition;
     -moz-transition:    $transition;
@@ -15,7 +17,7 @@
     transition:         $transition;
 }
 
-// ** END VARIABLES SCSS ** //
+// // ** END VARIABLES SCSS ** //
 
 html, body {
     font-family: 'Roboto', sans-serif;
@@ -92,7 +94,7 @@ html, body {
   transform: scaleX(-1);
 }
 .lr{
-	input {
+	.input {
 		background-color: $color-neutral !important;
 		color: $color-primary;
 		border: 1px solid $color-light-gray !important;
@@ -119,8 +121,24 @@ html, body {
 		height: 30px;
 		line-height: 30px;
 	}
-	.calendar {
-		display: flex;
-    	justify-content: center;
-	}
+}
+.vs__dropdown-toggle {
+	background: #ffffff;
+}
+.container {
+	justify-content: center;
+}
+.flex {
+	display: flex;
+}
+.selector {
+	margin: 15px;
+	width: 250px;
+}
+.label-input {
+	display: block;
+}
+.flex50 {
+	flex: 1;
+	margin: 10px;
 }
