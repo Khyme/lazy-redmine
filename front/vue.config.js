@@ -8,7 +8,10 @@ const proxyTable = {
 module.exports = {
   devServer: {
     proxy: proxyTable,
-    port: 8080
+    port: 8080,
+		watchOptions: {
+      poll: true
+		}
   },
   css: {
 	requireModuleExtension: false,

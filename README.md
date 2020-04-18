@@ -1,31 +1,28 @@
 # lazy-redmine
 
-Let you fill redmine timesheet automatically by daterange using api (require user's key)
+Letting you fill redmine timesheet automatically by daterange using api (requires user's key)
 
 ## Project setup
 ```
-npm install
+cd back; npm install; cd ../front; npm install;
 ```
 
 ### Compiles and hot-reloads backend for development
 ```
-npm run dev
+cd back; npm run dev;
 ```
 
 ### Compiles and hot-reloads ui for development
 ```
-npm run serve
+cd front; npm run serve;
 ```
 
-### Compiles and minifies for production
+### Build for production
+Using docker
 ```
-npm run build
+docker build -t lazy-redmine .
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
