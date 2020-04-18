@@ -4,10 +4,11 @@ const app = express()
 const config = require('config');
 
 const port = 3000
+const HOST = '0.0.0.0'
 var bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
-app.use(express.static('dist'))
+app.use(express.static('../front/dist'))
 
 const httpClient = axios.create({
 		method: 'post',
@@ -54,4 +55,4 @@ app.get('/api/baseurl', (req, res) =>
 
 app.get('/', (req, res) => res.send('Hello'))
 
-app.listen(port)
+app.listen(port, HOST)

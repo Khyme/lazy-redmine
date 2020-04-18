@@ -1,0 +1,8 @@
+/back/node_modules
+/front/node_modules
+/front/dist
+npm-debug.log
+.git
+.gitignore
+.eslintignore
+.eslintrc.*
