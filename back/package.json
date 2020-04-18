@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "export NODE_ENV=herow && nodemon server.js"
+    "dev": "export NODE_ENV=herow && nodemon server.js",
+    "start": "export NODE_ENV=herow && node server.js"
   },
   "dependencies": {
     "axios": "^0.19.2",

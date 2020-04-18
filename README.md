@@ -9,7 +9,7 @@ npm install
 
 ### Compiles and hot-reloads backend for development
 ```
-npm run start
+npm run dev
 ```
 
 ### Compiles and hot-reloads ui for development

@@ -4,7 +4,7 @@ const app = express()
 const config = require('config');
 
 const port = 3000
-const HOST = '0.0.0.0'
+
 var bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
@@ -55,4 +55,4 @@ app.get('/api/baseurl', (req, res) =>
 
 app.get('/', (req, res) => res.send('Hello'))
 
-app.listen(port, HOST)
+app.listen(port)

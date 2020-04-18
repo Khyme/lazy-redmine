@@ -9,5 +9,6 @@ COPY ./back/package*.json ./back/
 RUN cd back && npm install
 COPY ./back ./back/
 WORKDIR /app/back
+
 EXPOSE 3000
 CMD ["npm", "run", "start"]
