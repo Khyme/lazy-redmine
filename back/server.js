@@ -49,6 +49,30 @@ app.post('/api/time_entries/check', (req, res) =>
 	})
 )
 
+app.post('/api/projects', (req, res) => {
+	let url = req.body.offset ? '/projects.json?limit=100&offset=' + req.body.offset : '/projects.json?limit=100'
+	httpClient.get(url, {
+		headers: {'X-Redmine-API-Key': req.body.key}
+	}).then(response => {
+		response.data.projects =response.data.projects.filter(x => x.status === 1)
+		res.send(response.data)
+	}).catch(e => {
+		res.sendStatus(e.response.status)
+		console.error(e)
+	})
+})
+
+app.post('/api/activities', (req, res) => {
+	httpClient.get('/projects/' + req.body.id + '.json?include=time_entry_activities', {
+		headers: {'X-Redmine-API-Key': req.body.key}
+	}).then(response => {
+		res.send(response.data)
+	}).catch(e => {
+		res.sendStatus(e.response.status)
+		console.error(e)
+	})
+})
+
 app.get('/api/baseurl', (req, res) =>
 	res.send(config.get('redmineBaseUrl') + '/time_entries?user_id=me')
 )

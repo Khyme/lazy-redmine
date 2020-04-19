@@ -5,8 +5,10 @@
       En retard pour remplir les temps du trimestre ? Y'a qu'à cliquer !
       <span
         class="small"
-      >Retire les jours fériés et les week ends comme un grand</span>
-      <span class="small">Ne dépasse jamais 8h par jour</span>
+      >N'ajoute pas de temps aux jours fériés et aux week ends</span>
+      <span
+        class="small"
+      >Ne dépasse jamais 8h par jour</span>
     </p>
     <a
       :href="timesheetUrl"
@@ -66,6 +68,8 @@
           v-model="project"
           label="name"
           :options="projects"
+          placeholder="Projet"
+          :disabled="!key"
         />
       </div>
       <div class="selector">
@@ -73,6 +77,8 @@
           v-model="activity"
           label="name"
           :options="activities"
+          placeholder="Activité"
+          :disabled="!project"
         />
       </div>
     </div>
@@ -99,6 +105,7 @@
 <script>
 import axios from 'axios'
 import * as moment from 'moment'
+import debounce from 'debounce'
 
 export default {
   name: 'Form',
@@ -112,25 +119,33 @@ export default {
       comments: 'added via Lazy Redmine',
       days: {},
       hours: 8,
-      project: { name: 'R&D - Herow', id: 218 },
-      projects: [
-        { name: 'R&D - Herow', id: 218 },
-        { name: '*Connecthings', id: 92 }
-      ],
-      activity: { name: 'Développement', id: 376 },
-      activities: [
-        { name: 'Développement', id: 376 },
-        { name: 'Congé payés / RTT', id: 375 }
-      ]
+      project: null,
+      projects: [],
+      activity: null,
+      activities: []
     }
   },
   watch: {
+    key: function (newEnv, oldEnv) {
+      if (newEnv.length) {
+        this.getProjects(newEnv, null)
+      } else {
+        this.projects = []
+        this.project = null
+      }
+    },
     // putting watchers since vselect @change is broken https://github.com/sagalbot/vue-select/issues/545
     activity: function (newEnv, oldEnv) {
       this.updateForm('activity', newEnv)
     },
     project: function (newEnv, oldEnv) {
       this.updateForm('project', newEnv)
+      if (newEnv != null && newEnv.id != null) {
+        this.getActivities(this.key, newEnv.id)
+      } else {
+        this.activities = []
+        this.activity = null
+      }
     }
   },
   created () {
@@ -151,6 +166,7 @@ export default {
       if (storedForm.project) {
         this.project = storedForm.project
       }
+      this.getProjects = debounce(this.getProjects, 500)
     }
     axios({
       method: 'get',
@@ -171,7 +187,6 @@ export default {
         res = res
           .filter(x => x.nom_jour_ferie !== 'Lundi de Pentecôte') // filter solidarity day https://www.service-public.fr/professionnels-entreprises/actualites/A13357
           .map(x => x.date)
-        console.debug(res)
         this.feries = res
       })
   },
@@ -214,19 +229,17 @@ export default {
               key: this.key,
               date: dateFormatted
             }
+          }).then(response => {
+            let timespent = 0
+            response.data.time_entries.forEach(x => {
+              timespent += x.hours
+            })
+            if (timespent < 8) {
+              this.putTimeEntry(dateFormatted, timespent)
+            }
+          }).catch(e => {
+            console.error(e)
           })
-            .then(response => {
-              let timespent = 0
-              response.data.time_entries.forEach(x => {
-                timespent += x.hours
-              })
-              if (timespent < 8) {
-                this.putTimeEntry(dateFormatted, timespent)
-              }
-            })
-            .catch(e => {
-              console.error(e)
-            })
         }
       }
       setTimeout(() => {
@@ -245,10 +258,10 @@ export default {
         },
         data: {
           key: this.key,
-          project: this.project,
+          project: this.project.id,
           comments: this.comments,
           hours: h,
-          activity: this.activity,
+          activity: this.activity.id,
           date
         }
       })
@@ -275,6 +288,38 @@ export default {
             text: e.response.statusText
           })
         })
+    },
+    getProjects (key, offset) {
+      axios({
+        method: 'post',
+        baseURL: '/api/projects',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          key: key,
+          offset: offset
+        }
+      }).then(response => {
+        this.projects = this.projects.concat(response.data.projects)
+        const returned = 100 * (offset + 1)
+        if (returned < response.data.total_count) this.getProjects(key, returned)
+      })
+    },
+    getActivities (key, id) {
+      axios({
+        method: 'post',
+        baseURL: '/api/activities',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: {
+          key: key,
+          id: id
+        }
+      }).then(response => {
+        this.activities = response.data.project.time_entry_activities
+      })
     }
   }
 }

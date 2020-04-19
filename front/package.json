@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "debounce": "^1.2.0",
     "moment": "^2.24.0",
     "v-calendar": "^1.0.4",
     "vue": "^2.6.11",
