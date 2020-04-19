@@ -1,7 +1,6 @@
 # lazy-redmine
 
-A simple webapp to rapidly fill redmine timesheets by daterange using it's [REST api](https://www.redmine.org/projects/redmine/wiki/Rest_api).
-It requires *user's api access key* which is not stored on the server.
+A simple webapp to rapidly fill redmine timesheets by daterange using it's [REST api](https://www.redmine.org/projects/redmine/wiki/Rest_api), requiring *user's api access key* which is not stored on the server.
 
 ## Build and run
 
