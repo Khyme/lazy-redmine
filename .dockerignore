@@ -1,6 +1,5 @@
-/back/node_modules
-/front/node_modules
-/front/dist
+node_modules/
+dist/
 npm-debug.log
 .git
 .gitignore
