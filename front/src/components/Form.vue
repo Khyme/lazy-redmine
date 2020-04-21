@@ -1,32 +1,35 @@
 <template>
   <div>
-  <div class="lr">
-    <h1>Lazy Redmine</h1>
-    <p>
-      En retard pour remplir les temps du trimestre ? Y'a qu'à cliquer !
-      <span
-        class="small"
-      >N'ajoute pas de temps aux jours fériés et aux week ends</span>
-      <span
-        class="small"
-      >Ne dépasse jamais 8h par jour</span>
-    </p>
-    <a
-      :href="myTimesheetUrl"
-      target="_blank"
-    >
-      <button class="button secondary">Ma page de temps Redmine</button>
-    </a>
-    <form>
+    <div class="lr">
+      <h1>Lazy Redmine</h1>
+      <p>
+        En retard pour remplir les temps du trimestre ? Y'a qu'à cliquer !
+        <span
+          class="small"
+        >N'ajoute pas de temps aux jours fériés et aux week ends</span>
+        <span
+          class="small"
+        >Ne dépasse jamais 8h par jour</span>
+      </p>
+      <a
+        :href="myTimesheetUrl"
+        target="_blank"
+      >
+        <button class="button secondary">Ma page de temps Redmine</button>
+      </a>
 
+      <form>
         <label
-          title="A droite sur la page Mon compte">
+          title="A droite sur la page Mon compte"
+        >
           Clé d'accès API
-          <a :href="myApiKey" target="_blank" style="text-decoration: none !important;">&#9432;</a>
+          <a
+            :href="myApiKey"
+            target="_blank"
+          >&#9432;</a>
         </label>
         <input
           v-model="key"
-          class="input m10"
           placeholder="Ma clé redmine"
           @change="updateForm('key', $event.target.value)"
         >
@@ -34,7 +37,6 @@
         <label>Commentaire</label>
         <input
           v-model="comments"
-          class="input"
           placeholder="Comment"
           @change="updateForm('comments', $event.target.value)"
         >
@@ -42,7 +44,6 @@
         <label>Nombre d'heure</label>
         <input
           v-model="hours"
-          class="input"
           type="number"
           step="0.10"
           min="0.1"
@@ -57,46 +58,46 @@
           v-model="fillhours"
           type="checkbox"
         >
-    </form>
+      </form>
 
-    <div class="container flex">
-      <div class="selector">
-        <vselect
-          v-model="project"
-          label="name"
-          :options="projects"
-          placeholder="Projet"
-          :disabled="!key"
+      <div class="container flex">
+        <div class="selector">
+          <vselect
+            v-model="project"
+            label="name"
+            :options="projects"
+            placeholder="Projet"
+            :disabled="!key"
+          />
+        </div>
+        <div class="selector">
+          <vselect
+            v-model="activity"
+            label="name"
+            :options="activities"
+            placeholder="Activité"
+            :disabled="!project"
+          />
+        </div>
+      </div>
+      <div class="container flex">
+        <v-date-picker
+          v-model="days"
+          mode="range"
+          color="red"
+          is-dark
+          is-inline
         />
       </div>
-      <div class="selector">
-        <vselect
-          v-model="activity"
-          label="name"
-          :options="activities"
-          placeholder="Activité"
-          :disabled="!project"
-        />
-      </div>
+      <button
+        class="button primary submit"
+        :disabled="!project || !key || !activity || loading"
+        @click="submit"
+      >
+        PLZ HELP ME
+      </button>
+      <notifications group="notif" />
     </div>
-    <div class="container flex">
-      <v-date-picker
-        v-model="days"
-        mode="range"
-        color="red"
-        is-dark
-        is-inline
-      />
-    </div>
-    <button
-      class="button primary submit"
-      :disabled="!project || !key || !activity || loading"
-      @click="submit"
-    >
-      PLZ HELP ME
-    </button>
-    <notifications group="notif" />
-  </div>
   </div>
 </template>
 

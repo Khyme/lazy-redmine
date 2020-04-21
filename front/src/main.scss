@@ -94,24 +94,6 @@ html, body {
   transform: scaleX(-1);
 }
 .lr{
-	.input {
-		background-color: $color-neutral !important;
-		color: $color-primary;
-		border: 1px solid $color-light-gray !important;
-		border-radius: 5px !important;
-		font-size: $baseFontSize;
-		padding: 5px 5px 5px 8px !important;
-		height: $input-height;
-		line-height: $input-height;
-		box-sizing: border-box;
-		&:disabled {
-          color: $color-light-gray;
-          cursor: default;
-        }
-		::placeholder {
-			color: $color-light-gray;
-		}
-	}
 	form {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
@@ -120,11 +102,30 @@ html, body {
 			grid-column: 1;
 			align-self: center;
 			justify-self: end;
+			a {
+				text-decoration: none !important;
+			}
 		}
 		input {
 			margin: 10px;
 			grid-column: 2;
 			justify-self: start;
+			background-color: $color-neutral !important;
+			color: $color-primary;
+			border: 1px solid $color-light-gray !important;
+			border-radius: 5px !important;
+			font-size: $baseFontSize;
+			padding: 5px 5px 5px 8px !important;
+			height: $input-height;
+			line-height: $input-height;
+			box-sizing: border-box;
+			&:disabled {
+						color: $color-light-gray;
+						cursor: default;
+					}
+			::placeholder {
+				color: $color-light-gray;
+			}
 		}
 	}
 	select {
