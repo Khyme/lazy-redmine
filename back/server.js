@@ -77,4 +77,8 @@ app.get('/api/myTimesheetUrl', (req, res) =>
 	res.send(config.get('redmineBaseUrl') + '/time_entries?user_id=me')
 )
 
+app.get('/api/myApiKey', (req, res) =>
+	res.send(config.get('redmineBaseUrl') + '/my/account')
+)
+
 app.listen(port)
