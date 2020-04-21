@@ -21,11 +21,10 @@
         <label
           class="flex50"
           for="checkbox"
-          title="A droite sur la page Mon compte"
-        ><a
-          :href="myApiKey"
-          target="_blank"
-        >Clé d'accès API</a> &#9432;</label>
+          title="A droite sur la page Mon compte">
+          Clé d'accès API
+          <a :href="myApiKey" target="_blank" style="text-decoration: none !important;">&#9432;</a>
+        </label>
         <input
           v-model="key"
           class="input flex50"
@@ -181,13 +180,11 @@ export default {
       }
       this.getProjects = debounce(this.getProjects, 500)
     }
-    httpClient.get('/myTimesheetUrl')
+    httpClient.get('/redmineBaseUrl')
       .then(response => {
-        this.myTimesheetUrl = response.data
-      })
-    httpClient.get('/myApiKey')
-      .then(response => {
-        this.myApiKey = response.data
+        var base = response.data
+        this.myApiKey = base + '/my/api_key'
+        this.myTimesheetUrl = base + '/time_entries?user_id=me'
       })
   },
   mounted () {
