@@ -11,12 +11,9 @@ app.use(bodyParser.json())
 app.use(express.static('../front/dist'))
 
 const httpClient = axios.create({
-	method: 'post',
 	baseURL: config.get('redmineBaseUrl'),
 	timeout: 5000,
-	headers: {
-		'Content-Type': 'application/json'
-	}
+	headers: { 'Content-Type': 'application/json' }
 })
 
 app.post('/api/time_entries', (req, res) =>
@@ -73,12 +70,8 @@ app.post('/api/activities', (req, res) => {
 	})
 })
 
-app.get('/api/myTimesheetUrl', (req, res) =>
-	res.send(config.get('redmineBaseUrl') + '/time_entries?user_id=me')
-)
-
-app.get('/api/myApiKey', (req, res) =>
-	res.send(config.get('redmineBaseUrl') + '/my/account')
+app.get('/api/redmineBaseUrl', (req, res) =>
+	res.send(config.get('redmineBaseUrl'))
 )
 
 app.listen(port)
