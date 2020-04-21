@@ -11,7 +11,7 @@
       >Ne dépasse jamais 8h par jour</span>
     </p>
     <a
-      :href="timesheetUrl"
+      :href="myTimesheetUrl"
       target="_blank"
     >
       <button class="button secondary">Ma page de temps Redmine</button>
@@ -107,12 +107,20 @@ import axios from 'axios'
 import * as moment from 'moment'
 import debounce from 'debounce'
 
+const httpClient = axios.create({
+  baseURL: './api',
+  timeout: 30000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
 export default {
   name: 'Form',
   data () {
     return {
       fillhours: false,
-      timesheetUrl: '',
+      myTimesheetUrl: '',
       loading: false,
       feries: null,
       key: '',
@@ -168,15 +176,10 @@ export default {
       }
       this.getProjects = debounce(this.getProjects, 500)
     }
-    axios({
-      method: 'get',
-      baseURL: '/api/baseurl',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then(response => {
-      this.timesheetUrl = response.data
-    })
+    httpClient.get('/myTimesheetUrl')
+      .then(response => {
+        this.myTimesheetUrl = response.data
+      })
   },
   mounted () {
     fetch(
@@ -219,16 +222,9 @@ export default {
           m.isoWeekday() < 6 &&
                     !this.feries.includes(dateFormatted)
         ) {
-          axios({
-            method: 'post',
-            baseURL: '/api/time_entries/check',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            data: {
-              key: this.key,
-              date: dateFormatted
-            }
+          httpClient.post('/time_entries/check', {
+            key: this.key,
+            date: dateFormatted
           }).then(response => {
             let timespent = 0
             response.data.time_entries.forEach(x => {
@@ -250,20 +246,13 @@ export default {
       const h = this.fillhours
         ? 8 - timespent
         : Math.min(this.hours, 8 - timespent)
-      axios({
-        method: 'post',
-        baseURL: '/api/time_entries',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          key: this.key,
-          project: this.project.id,
-          comments: this.comments,
-          hours: h,
-          activity: this.activity.id,
-          date
-        }
+      httpClient.post('/time_entries', {
+        key: this.key,
+        project: this.project.id,
+        comments: this.comments,
+        hours: h,
+        activity: this.activity.id,
+        date
       })
         .then(response => {
           if (response.status === 200) {
@@ -290,16 +279,9 @@ export default {
         })
     },
     getProjects (key, offset) {
-      axios({
-        method: 'post',
-        baseURL: '/api/projects',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          key: key,
-          offset: offset
-        }
+      httpClient.post('/projects', {
+        key: key,
+        offset: offset
       }).then(response => {
         this.projects = this.projects.concat(response.data.projects)
         const returned = 100 * (offset + 1)
@@ -307,16 +289,9 @@ export default {
       })
     },
     getActivities (key, id) {
-      axios({
-        method: 'post',
-        baseURL: '/api/activities',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: {
-          key: key,
-          id: id
-        }
+      httpClient.post('/activities', {
+        key: key,
+        id: id
       }).then(response => {
         this.activities = response.data.project.time_entry_activities
       })

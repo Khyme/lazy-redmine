@@ -6,15 +6,16 @@ const proxyTable = {
 }
 
 module.exports = {
+  publicPath: '',
   devServer: {
     proxy: proxyTable,
     port: 8080,
-		watchOptions: {
+    watchOptions: {
       poll: true
-		}
+    }
   },
   css: {
-	requireModuleExtension: false,
+    requireModuleExtension: false,
     loaderOptions: {
       // by default the `sass` option will apply to both syntaxes
       // because `scss` syntax is also processed by sass-loader underlyingly
