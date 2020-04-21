@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="lr">
     <h1>Lazy Redmine</h1>
     <p>
@@ -16,39 +17,32 @@
     >
       <button class="button secondary">Ma page de temps Redmine</button>
     </a>
-    <div class="container">
-      <div class="label-input">
+    <form>
+
         <label
-          class="flex50"
-          for="checkbox"
           title="A droite sur la page Mon compte">
           Clé d'accès API
           <a :href="myApiKey" target="_blank" style="text-decoration: none !important;">&#9432;</a>
         </label>
         <input
           v-model="key"
-          class="input flex50"
+          class="input m10"
           placeholder="Ma clé redmine"
           @change="updateForm('key', $event.target.value)"
         >
-      </div>
-      <div class="label-input">
-        <label
-          class="flex50"
-          for="checkbox"
-        >Commentaire</label>
+
+        <label>Commentaire</label>
         <input
           v-model="comments"
-          class="input flex50"
+          class="input"
           placeholder="Comment"
           @change="updateForm('comments', $event.target.value)"
         >
-      </div>
-      <div class="label-input">
-        <label for="checkbox">Nombre d'heure</label>
+
+        <label>Nombre d'heure</label>
         <input
           v-model="hours"
-          class="input flex50"
+          class="input"
           type="number"
           step="0.10"
           min="0.1"
@@ -57,14 +51,14 @@
           :disabled="fillhours"
           @change="updateForm('hours', $event.target.value)"
         >
+        <label for="checkbox">Compléter les journées</label>
         <input
           id="checkbox"
           v-model="fillhours"
           type="checkbox"
         >
-        <label for="checkbox">Compléter les journées</label>
-      </div>
-    </div>
+    </form>
+
     <div class="container flex">
       <div class="selector">
         <vselect
@@ -102,6 +96,7 @@
       PLZ HELP ME
     </button>
     <notifications group="notif" />
+  </div>
   </div>
 </template>
 

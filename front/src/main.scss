@@ -112,7 +112,22 @@ html, body {
 			color: $color-light-gray;
 		}
 	}
-
+	form {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		align-content: space-evenly;
+		label {
+			grid-column: 1;
+			align-self: center;
+			justify-self: end;
+		}
+		input,
+		button {
+			margin: 10px;
+			grid-column: 2;
+			justify-self: start;
+		}
+	}
 	select {
 		border: 1px solid $color-light-gray;
 		border-radius: 5px !important;
@@ -138,7 +153,6 @@ html, body {
 .label-input {
 	display: block;
 }
-.flex50 {
-	flex: 1;
+.m10 {
 	margin: 10px;
 }
