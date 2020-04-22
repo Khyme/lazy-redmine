@@ -19,9 +19,7 @@
       </a>
 
       <form>
-        <label
-          title="A droite sur la page Mon compte"
-        >
+        <label>
           Clé d'accès API
           <a
             :href="myApiKey"
