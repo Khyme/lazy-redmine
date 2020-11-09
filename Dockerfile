@@ -10,10 +10,10 @@ WORKDIR /app
 COPY . .
 
 WORKDIR /app/front
-RUN npm install && npm rebuild node-sass && npm run build
+RUN npm ci && npm rebuild node-sass && npm run build
 
 WORKDIR /app/back
-RUN npm install --only=production
+RUN npm ci --only=production
 
 # ---- Release ----
 FROM base AS release
