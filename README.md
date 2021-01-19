@@ -11,6 +11,8 @@ docker build -t lazy-redmine .
 docker run --rm -p 3000:3000 lazy-redmine
 ```
 
+You can now open your browser on http://localhost:3000
+
 ### Dev build
 
 #### Initial setup
